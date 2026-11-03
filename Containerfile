@@ -15,7 +15,7 @@ RUN dnf -y install \
     pcre2-devel sqlite-devel zlib-devel libcap-devel \
     libffi-devel xz-devel libidn2-devel libtasn1-devel \
     nettle-devel libunistring-devel libgpg-error-devel \
-    libgcrypt-devel openssl-devel git wget file \
+    libgcrypt-devel openssl-devel git wget file xclip \
     && dnf clean all
 
 # Clone Emacs master
