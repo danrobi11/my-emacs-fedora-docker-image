@@ -17,6 +17,7 @@ podman run -it --rm --name emacs \
   --userns=keep-id \
   -e HOME=/var/home/danrobi \
   -v /var/home/danrobi:/var/home/danrobi \
+  -v /var/home/danrobi:/home/danrobi \
   -v /:/run/host:rslave \
   -w /var/home/danrobi \
   ghcr.io/danrobi11/my-emacs-fedora-docker-image:latest emacs -nw
