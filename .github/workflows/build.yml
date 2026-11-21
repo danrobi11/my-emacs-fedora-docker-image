@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+    paths-ignore:
+      - README.md
   schedule:
     # Rebuild weekly so it tracks Emacs master
     - cron: '0 3 * * 1'
@@ -43,7 +45,7 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
-            type=raw,value=fedora45
+            type=raw,value=rawhide
 
       - name: Build and push
         uses: docker/build-push-action@v6

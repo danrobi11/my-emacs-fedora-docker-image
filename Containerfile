@@ -1,4 +1,4 @@
-# Emacs from master on Fedora 45 (dynamic, terminal-only, pdumper)
+# Emacs from master on Fedora Rawhide (dynamic, terminal-only, pdumper)
 # Based on the build flags from https://github.com/danrobi11/emacs-fedora-dynamic
 #
 # Build:
@@ -6,7 +6,7 @@
 #
 # Or multi-stage from your bootc image later.
 
-FROM fedora:45
+FROM fedora:rawhide
 
 # Install build dependencies (same as the GH Actions workflow)
 RUN dnf -y install \
@@ -70,5 +70,5 @@ CMD ["emacs", "-nw"]
 
 # Label
 LABEL org.opencontainers.image.source="https://github.com/danrobi11/emacs-fedora-dynamic" \
-      org.opencontainers.image.description="Emacs master built dynamically on Fedora 45 (terminal, pdumper)" \
+      org.opencontainers.image.description="Emacs master built dynamically on Fedora Rawhide (terminal, pdumper)" \
       org.opencontainers.image.licenses="GPL-3.0"
