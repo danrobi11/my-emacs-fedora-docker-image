@@ -9,12 +9,10 @@ Matches the configuration used in [emacs-fedora-dynamic](https://github.com/danr
 
 ## How to
 
-The container uses the host program directories and libraries, the host process list, and the X socket. `podman` talks to the host socket.
+The container uses the host program directories and libraries, the host process list, and the X socket.
 
 ```bash
 podman pull ghcr.io/danrobi11/my-emacs-fedora-docker-image:latest
-
-mkdir -p /var/home/danrobi/.cache/emacs-container-run/podman
 
 podman run -it --rm --name emacs \
   --security-opt label=disable \
@@ -29,8 +27,6 @@ podman run -it --rm --name emacs \
   -v /usr/lib64:/usr/lib64:ro \
   -v /usr/lib:/usr/lib:ro \
   -v /usr/libexec:/usr/libexec:ro \
-  -v /run/user/1000/podman/podman.sock:/var/home/danrobi/.cache/emacs-container-run/podman/podman.sock \
-  -v /var/home/danrobi/.emacs.d/emacs-scripts/podman-remote:/usr/local/bin/podman:ro \
   -v /:/run/host:rslave \
   -w /var/home/danrobi \
   ghcr.io/danrobi11/my-emacs-fedora-docker-image:latest emacs -nw
