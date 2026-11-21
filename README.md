@@ -9,6 +9,8 @@ Matches the configuration used in [emacs-fedora-dynamic](https://github.com/danr
 
 ## How to
 
+The container uses the host program directories and libraries, the host process list, and the X socket.
+
 ```bash
 podman pull ghcr.io/danrobi11/my-emacs-fedora-docker-image:latest
 
@@ -21,6 +23,10 @@ podman run -it --rm --name emacs \
   -v /var/home/danrobi:/var/home/danrobi \
   -v /var/home/danrobi:/home/danrobi \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v /usr/bin:/usr/bin:ro \
+  -v /usr/lib64:/usr/lib64:ro \
+  -v /usr/lib:/usr/lib:ro \
+  -v /usr/libexec:/usr/libexec:ro \
   -v /:/run/host:rslave \
   -w /var/home/danrobi \
   ghcr.io/danrobi11/my-emacs-fedora-docker-image:latest emacs -nw
