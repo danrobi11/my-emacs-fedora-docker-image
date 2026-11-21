@@ -9,7 +9,7 @@ Matches the configuration used in [emacs-fedora-dynamic](https://github.com/danr
 
 ## How to
 
-The container uses the host program directories and libraries, the host process list, and the X socket.
+The container uses the host program directories and libraries, the host process list, and the X socket. `/dev/fuse` lets AppImages mount instead of extracting.
 
 ```bash
 podman pull ghcr.io/danrobi11/my-emacs-fedora-docker-image:latest
@@ -18,6 +18,7 @@ podman run -it --rm --name emacs \
   --security-opt label=disable \
   --userns=keep-id \
   --pid=host \
+  --device /dev/fuse \
   -e HOME=/var/home/danrobi \
   -e DISPLAY="$DISPLAY" \
   -v /var/home/danrobi:/var/home/danrobi \
