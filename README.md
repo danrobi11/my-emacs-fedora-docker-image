@@ -25,6 +25,7 @@ podman run -it --rm --name emacs \
   --device /dev/snd \
   -e HOME=/var/home/danrobi \
   -e DISPLAY="$DISPLAY" \
+  -e TERM=xterm-256color \
   -v /var/home/danrobi:/var/home/danrobi \
   -v /var/home/danrobi:/home/danrobi \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
