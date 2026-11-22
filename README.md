@@ -61,3 +61,64 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger --action=add --subsystem-match=sound
 sudo udevadm trigger --action=add --sysname-match=card0
 ```
+## Fix xclip / clipboard issue.
+
+Create this file:
+
+```bash
+/var/home/danrobi/bin/clipboard-keep
+```
+Add this in /var/home/danrobi/bin/clipboard-keep
+
+```bash
+#!/bin/bash
+# Own the X CLIPBOARD after each copy, and keep a short text history.
+# Uses only xclip. X drops a selection when its owner exits.
+dir=${XDG_DATA_HOME:-$HOME/.local/share}/clipboard-keep
+mkdir -p "$dir/clips"
+pidfile=$dir/pid
+current=$dir/current
+tmp=$dir/read.tmp
+err=$dir/read.err
+max=50
+
+if [[ -f $pidfile ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
+  exit 0
+fi
+echo $$ >"$pidfile"
+trap 'rm -f "$pidfile" "$tmp" "$err"' EXIT
+
+own() {
+  xclip -selection clipboard -loops 0 <"$1"
+}
+
+remember() {
+  local last n name
+  cp "$tmp" "$current"
+  last=$(ls -1 "$dir/clips" 2>/dev/null | sort | tail -1)
+  if [[ -n $last ]] && cmp -s "$tmp" "$dir/clips/$last"; then
+    own "$current"
+    return
+  fi
+  n=$((10#${last:-0} + 1))
+  printf -v name '%06d' "$n"
+  cp "$tmp" "$dir/clips/$name"
+  ls -1 "$dir/clips" | sort | head -n "-$max" | while read -r old; do
+    rm -f "$dir/clips/$old"
+  done
+  own "$current"
+}
+
+[[ -s $current ]] && own "$current"
+
+while true; do
+  if xclip -o -selection clipboard -t UTF8_STRING >"$tmp" 2>"$err"; then
+    if [[ -s $tmp && $(wc -c <"$tmp") -le 512000 ]] && ! cmp -s "$tmp" "$current"; then
+      remember
+    fi
+  elif grep -q "no owner" "$err" && [[ -s $current ]]; then
+    own "$current"
+  fi
+  sleep 0.3
+done
+```
