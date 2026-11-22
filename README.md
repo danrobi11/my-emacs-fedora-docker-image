@@ -61,7 +61,27 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger --action=add --subsystem-match=sound
 sudo udevadm trigger --action=add --sysname-match=card0
 ```
-## Fix xclip / clipboard issue.
+## Fix the `yank-from-kill-ring` issue with xclip.
+
+Add this function in your init.el:
+
+```bash
+(defun my-clipboard-keep-import (&rest _args)
+  "Add clipboard-keep history to `kill-ring'."
+  (let ((dir (expand-file-name "clipboard-keep/clips"
+                                (or (getenv "XDG_DATA_HOME")
+                                    "~/.local/share"))))
+    (when (file-directory-p dir)
+      (dolist (file (directory-files dir t "\\`[0-9]+\\'"))
+        (let ((text (with-temp-buffer
+                      (insert-file-contents file)
+                      (buffer-string))))
+          (unless (or (string-empty-p text)
+                      (seq-some (lambda (item) (string= item text)) kill-ring))
+            (push text kill-ring)))))))
+
+(advice-add 'read-from-kill-ring :before #'my-clipboard-keep-import)
+```
 
 Create this file:
 
