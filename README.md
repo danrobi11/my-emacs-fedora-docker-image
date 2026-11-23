@@ -20,6 +20,7 @@ podman run -it --rm --name emacs \
   --security-opt label=disable \
   --userns=keep-id \
   --pid=host \
+  --network=host \
   --device /dev/fuse \
   --device /dev/dri \
   --device /dev/snd \
